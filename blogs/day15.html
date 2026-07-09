@@ -26,7 +26,6 @@
 #include <iostream> <br>
 #include<vector> <br>
 using namespace std;<br>
-
 //Driver Code Ends<br>
 int count(vector<int> &coins, int sum) {<br>
     int n = coins.size();<br>
@@ -42,8 +41,10 @@ int count(vector<int> &coins, int sum) {<br>
             dp[j] += dp[j - coins[i]];<br>
     return dp[sum];<br>
 }<br>
-
-        <p>follow my everyday blogs, youre going to witness my life ramming and unfolding infront of your eyes!!  </p>
+in simple language suppose you have been given a coins of denomination {1,2,3} and you have to make a sum of 4 via coins, so the DP idea is to find the number of ways to make sum j using a coin of value x, look at how many ways you could already 
+make {j-x} because if you can make {j-x} then adding one coin of value x gives {j-x}+{x}=j. which is basically dp[j]= dp[j]+dp[j-x]. this problem is direct implication of this exact coin problem but instead of denominations you have to first make a vector of all the possible palindromes{}. 
+there were so many ways you could have gone wrong even though the answer was simple asf. you couldve gone towards matrix multiplication, problem "parquet", partition matrix etc.
+         <p>follow my everyday blogs, youre going to witness my life ramming and unfolding infront of your eyes!!  </p>
         <p>&copy; 2026 My Simple Blog</p>
     </footer>
 </body>
