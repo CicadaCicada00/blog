@@ -30,13 +30,10 @@ using namespace std;<br>
 //Driver Code Ends<br>
 int count(vector<int> &coins, int sum) {<br>
     int n = coins.size();<br>
-    
     // dp[i] will be storing the number of solutions for<br>
     // value i.<br>
     vector<int> dp(sum + 1);<br>
-
     dp[0] = 1;<br>
-
     // Pick all coins one by one and update the table[]<br>
     // values after the index greater than or equal to the<br>
     // value of the picked coin<br>
