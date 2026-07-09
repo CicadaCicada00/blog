@@ -44,8 +44,31 @@ int count(vector<int> &coins, int sum) {<br>
 in simple language suppose you have been given a coins of denomination {1,2,3} and you have to make a sum of 4 via coins, so the DP idea is to find the number of ways to make sum j using a coin of value x, look at how many ways you could already 
 make {j-x} because if you can make {j-x} then adding one coin of value x gives {j-x}+{x}=j. which is basically dp[j]= dp[j]+dp[j-x]. this problem is direct implication of this exact coin problem but instead of denominations you have to first make a vector of all the possible palindromes{}. 
 there were so many ways you could have gone wrong even though the answer was simple asf. you couldve gone towards matrix multiplication, problem "parquet", partition matrix etc.<br>
-also refer : <a href= "https://courses.grainger.illinois.edu/cs573/fa2013/lec/lec/04_dprog.pdf">DP.Partition</a>. 
-</p>
+also refer : <a href= "https://courses.grainger.illinois.edu/cs573/fa2013/lec/lec/04_dprog.pdf">DP.Partition</a>.<br><br>
+Another good problem i came across: <a href ="https://codeforces.com/problemset/problem/1646/C ">Factorials and Powers of Two</a> in this you have to figure out the minimum distinct k powerful numbers where powerful number is described as 2^d or d!.heres the code: <br>
+</p><pre><code>
+ll original = n;
+ll ans = __builtin_popcountll(n);
+
+for (ll mask = 0; mask &lt; (1LL &lt;&lt; 15); mask++) {
+    ll sum = 0;
+    ll cnt = 0;
+
+    for (ll i = 0; i &lt; 15; i++) {
+        if (mask &amp; (1LL &lt;&lt; i)) {
+            sum += fact[i];
+            cnt++;
+        }
+    }
+
+    if (sum &lt;= original) {
+        ans = min(ans, cnt + (ll)__builtin_popcountll(original - sum));
+    }
+}
+</code></pre>
+<br>
+in this we are basically using bit manipulation to figure out all the possible subsets of fact that sum up to less than or equal to original, total iteration stays less
+than 500k(safe).  
          <p>follow my everyday blogs, youre going to witness my life ramming and unfolding infront of your eyes!!  </p>
         <p>&copy; 2026 My Simple Blog</p>
     </footer>
