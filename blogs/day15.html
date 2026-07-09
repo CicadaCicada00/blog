@@ -22,6 +22,29 @@
         This is modified problem on Integer partioning : example: 3= 2+1=1+1+1=3,{breaking a number into sum of positive integers}
         Integer partioning is overlap of famous coin problem(look it up) ,but in this prob the twist is that you have to break 
         the number into sum of positive palindromes 
+        //Driver Code Starts
+#include <iostream> <br>
+#include<vector> <br>
+using namespace std;<br>
+
+//Driver Code Ends<br>
+int count(vector<int> &coins, int sum) {<br>
+    int n = coins.size();<br>
+    
+    // dp[i] will be storing the number of solutions for<br>
+    // value i.<br>
+    vector<int> dp(sum + 1);<br>
+
+    dp[0] = 1;<br>
+
+    // Pick all coins one by one and update the table[]<br>
+    // values after the index greater than or equal to the<br>
+    // value of the picked coin<br>
+    for (int i = 0; i < n; i++)<br>
+        for (int j = coins[i]; j <= sum; j++)<br>
+            dp[j] += dp[j - coins[i]];<br>
+    return dp[sum];<br>
+}<br>
 
         <p>follow my everyday blogs, youre going to witness my life ramming and unfolding infront of your eyes!!  </p>
         <p>&copy; 2026 My Simple Blog</p>
