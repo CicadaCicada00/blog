@@ -34,9 +34,15 @@
            1/a = 1/a + 1/a*(a+1) . but this has a severe problem with our contraints which is output<=10^17 .but a*(a+1)==a*a {for large number}. a^2 grows rlly fast it surpases 10^17 in n<=50;<br> 
            to optimise this you can for odd n try 1/a = 1/2*a + 1/3*a + 1/6*a ;<br> 
            but this also overflows the contraint. so you have to look further. <br> 
-           as we look deeper into the optimisation case we just have to figure out to expand this from odd n to all n. 
-
-
+           as we look deeper into the optimisation case we just have to figure out to expand this from odd n to all n as it looks like under constraint.<br> 
+           try splitting the last number into 1/2*a + 1/2*a add appending into the sequence {let a be the last number in the sequence here its 6};<br> 
+           but we are getting one 1/2*a extra how do we deal with this? by induction:: <br> 
+           let 1 = sum(1/xi) we can transform this to --><br> 
+           1= 0.5 + 0.5*sum(1/xi).<br>
+           0.5*sum(1/xi) ==  sum(1/2*xi); xi doubles as we go down the n and we get 0.5 extra.<br>
+           the set becomes {2*x1, 2*x2, ...2*xn, 2}. <br>
+           for n+1. the set becomes {4*x1, 4*x2 .... 4*xn, 2*2, 2}. and so on and so on. <br> 
+           we have already got x1 x2 x3 for the set which is {2,3,6}. 
 
         </p>
         <p>follow my everyday blogs, youre going to witness my life ramming and unfolding infront of your eyes!!  </p>
