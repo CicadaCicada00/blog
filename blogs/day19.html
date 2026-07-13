@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>About Me - Introduction</title>
+    <link rel="stylesheet" href="..\style.css">
+</head>
+<body>
+    <header>
+        <h1>13th July 2026</h1>
+        <nav>
+            <a href="..\index.html">Home</a>
+        </nav> 
+    </header>
+
+    <main>
+        <p>
+           woke up and first thing i do is check my codeforces account and there you have it, specialist. up we go, we up. 
+           now lets discuss about the contest, i was rlly scared just before the contest but was pretty relaxed cuz of my prep and 
+           after seeing the question was pretty happy cuz problem statements were small :D .
+           first problem: <a href= "https://codeforces.com/problemset/problem/2246/A">Farmnpiggie and Subset sum</a> . this was really easy as its supposed to be first problem :P you just had to make sure that i*ci is never odd. means for every odd indexes you have to make sure 
+           there is even number and for every even index keep any odd number on it. I was thinking of going with multiples of 2 but cuz of the constraints n<=50 and pi<=n, you have to go with 
+           i-1 and i+1. <br><br> 
+           2nd problem: <a href ="https://codeforces.com/problemset/problem/2246/B">Ezraft and Array</a> this problem was Number theorish (reminded me of my David Burton days). So first you had to see the invariance: 
+           a1+a2+ ... an =sum= x1*a1=x2*a2=x3*a3.. =xn*an . Which means that sum is just Lcm of a1 to an, but still we cannot create subsequence from just this. <br> 
+           a1+a2+.... an = LCM;<br> 
+           this looks oddly similar maybe seen somewhere?<br>
+           dividing lcm to both lhs and rhs
+           a1/lcm  + a2/lcm + .... an/lcm = 1;<br>  
+           this becomes--> 1/x1  + 1/x2 .... 1/xn = 1; <br> 
+           this is famously seen in many NT inequality problems to break down complex inequalities further. but we are hooking for sequence so lets not dive there. <br> 
+           we have to break down 1 into number of fractions which sounds like <a href= "https://mathworld.wolfram.com/EgyptianFraction.html?utm_source=chatgpt.com">Egyptian Fractions</a>, there are many known tricks to dissolve fraction into further fractions . There is no restriction on n so best one right now looks 
+           1/a = 1/a + 1/a*(a+1) . but this has a severe problem with our contraints which is output<=10^17 .but a*(a+1)==a*a {for large number}. a^2 grows rlly fast it surpases 10^17 in n<=50;<br> 
+           to optimise this you can for odd n try 1/a = 1/2*a + 1/3*a + 1/6*a ;<br> 
+           but this also overflows the contraint. so you have to look further. <br> 
+           as we look deeper into the optimisation case we just have to figure out to expand this from odd n to all n. 
+
+
+
+        </p>
+        <p>follow my everyday blogs, youre going to witness my life ramming and unfolding infront of your eyes!!  </p>
+        <p>&copy; 2026 My Simple Blog</p>
+    </footer>
+</body>
+</html>
