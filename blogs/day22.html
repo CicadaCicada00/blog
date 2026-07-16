@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>About Me - Introduction</title>
+    <link rel="stylesheet" href="..\style.css">
+</head>
+<body>
+    <header>
+        <h1>16th July 2026</h1>
+        <nav>
+            <a href="..\index.html">Home</a>
+        </nav> 
+    </header>
+
+    <main>
+        <p>
+           <a href = "https://codeforces.com/problemset/problem/2244/D">Yaroslav and Productivity</a> <br> 
+           one thing you will realise in this problem is that order of 'b' does not matter. you can keep them sorted or store the number as position. <br>
+           also when youre processing whatever how do you process it, from left to right or right to left, right to left sounds easy but because all the prev positions before 
+           b{j} change so its more obvious to process loop from right to left. 
+           now the question basically asks whether you want to perform the operation at pos i or nah.  sounds a bit more like a dp with two states. <br>
+           dp[i][0] means youre not flipping the ith position. viceversa for dp[i][1]  means ith position is flipped.<br>
+           suppose if you got at pos b{j} then you have two choice either to flip or not flip, you have to consider both options. so you have to write the equations<br> 
+           dp[i][0]= max(dp[i+1][0], d[i+1][1]) +v[i] // not flipped<br>
+           dp[i][1] = max(dp[i+1][0], d[i+1][1]) -v[i] // flipped
+           if youre at position that is not b{j} then you have to follow the state of {i+1}th dp. so the equation becomes::<br>
+           dp[i][0] = d[i+1][0]+v[i]; <br>
+           dp[i][1] = dp[i+1][1]-v[i];<br>
+           at last when you reach 1st position your ans is maximum of dp[1][1] and dp[1][0]; <br> 
+           
+        </p>
+        <p>follow my everyday blogs, youre going to witness my life ramming and unfolding infront of your eyes!!  </p>
+        <p>&copy; 2026 My Simple Blog</p>
+    </footer>
+</body>
+</html>
