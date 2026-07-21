@@ -18,20 +18,12 @@
         <p>
             been busy in college, its from 10 to 6 holy fuck.. 
             <a href ="https://codeforces.com/problemset/problem/2245/A"> who watches the watchpig?</a>  
-            this was interesting problem. i was approaching it wrong. my thinking was to pair the L with R from left to right and R with L from right to left<br> 
-             for(ll i=0;i<=n;i++){ <br> 
-            if(i<k) continue; <br>
-            if(n-i<k) continue; <br>
-            ll left=0,right=0; <br>
-            for(ll j=0;j<i;j++){ <br>
-                if(s[i]=='L')left++; <br>
-            }<br>
-            for(ll j=i;j<n;j++){ <br>
-                if(s[i]=='R') right++;<br> 
-            }<br> 
-            ans= min(ans,left+right); <br>
-        }
-            
+            this was interesting problem. i was approaching it wrong. my thinking was to pair the L with R from left to right and R with L from right to left 
+            but correct solution is to transform first k positions to L and last k position to R. this was on the easy side.<br>
+            <a href ="https://codeforces.com/problemset/problem/1759/E">The Humanoid</a> in this problem my initial approach was to first use up all the green serums and then use blue serum. power increase in order:: {2,2,3}. 
+            but the power increase follows up permutation of green and blue serum:: {2,2,3}, {2,3,2}, {3,2,2}. also you have to make a prefix sum of [ai/2] .<br> 
+            <a href ="https://codeforces.com/problemset/problem/1765/K">Torus path</a> by observation my initial thinking was that the right top corner and bottom left corner and center for (n%2==1). as for n%2==0 you can make any cell empty{which is horribly wrong}.
+            concretly you can atmost 1 cell on antidiagonals have to be empty doesnt matter the parity of n or what cell outside the antidiagonal you chose to make empty. this is proved in the <a href = "https://codeforces.com/blog/entry/109642">editorial</a>. 
         </p>
         <p>follow my everyday blogs, youre going to witness my life ramming and unfolding infront of your eyes!!  </p>
         <p>&copy; 2026 My Simple Blog</p>
