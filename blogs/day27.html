@@ -18,13 +18,13 @@
         <p>
            <a href = "https://codeforces.com/problemset/problem/1765/N">Number Reduction</a> <br> 
            I am stuck on this problem since last night, Got to know it can be done using stack,lets see... 
-           this problem is very close to LEETCODE 402, but only difference is leading zeros are strictly forbidden and you must use exactly k deletions. <br> 
+           this problem is very close to LEETCODE <a href ="https://leetcode.com/problems/remove-k-digits/solutions/1779458/c-easy-to-understand-stack-short-simple-mfb1h/">402</a>, but only difference is leading zeros are strictly forbidden and you must use exactly k deletions. <br> 
            how do you use stack in this, you can also use vector, both will work similarly. first you have consider the monotonic increasing invarience. 
            keep pushing into the stack/vector until you found a digit which is smaller than the element on the top, then you dive into the while loop and keep removing/popping elements that
            are bigger than the digit that we are transversing through, dont process the digit if its 0.  just push it in the stack...You have to also maintain a variable head which you will compare against digit.
            because of examples like [3, 0 , 0] suppose you have 2 and k>=3. so you have make the new stack [2] but you cant pop normally cuz 0>2 so by normal method you will get [3,0,0,2] which is wrong.
-           so directly compare head= 3 with new digit eg = 2. and clear the whole stack and make it [2].  thats it. you have to also not maintain a condition stack.size()==1 && digit=='0' which is basically not letting 0 come in first position{head position}. 
-           
+           so directly compare head= 3 with new digit eg = 2. and clear the whole stack and make it [2].  thats it. you have to also not maintain a condition stack.size()==1 && digit=='0' which is basically not letting 0 come in first position{head position}. <br>
+
         </p>
         <p>follow my everyday blogs, youre going to witness my life ramming and unfolding infront of your eyes!!  </p>
         <p>&copy; 2026 My Simple Blog</p>
