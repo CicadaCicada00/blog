@@ -27,7 +27,51 @@
         only iterate from 0 to min(p, 2n)<br>
         <a href ="https://codeforces.com/contest/1811/problem/E">Living Sequence</a> this was good fundamental problem that i didnt see before: refer this <a href = "https://www.geeksforgeeks.org/dsa/finding-the-nth-term-in-a-sequence-formed-by-removing-digit-k-from-natural-numbers/">removing k</a>.<br>
         <br> 
-        I read two chapters of Goodbye Eri, its beautiful, the panels speaks through.BEAUTIFUL. Tatski Fujimoto  i rlly rlly love how you draw especially the light and empty panels, its like youre making a movie but on a paper, i love it love it!!!! <br>
+        I read two chapters of Goodbye Eri, its beautiful, the panels speaks through.BEAUTIFUL. Tatski Fujimoto  i rlly rlly love how you draw especially the light and empty panels, its like youre making a movie but on a paper, i love it love it!!!! <br><br>
+        today i learned rlly beautiful shit :: <a href = "https://cp-algorithms.com/combinatorics/binomial-coefficients.html" >Binomial coeff modulo m</a> where m is prime. in cp most times m is 1e9+7 which is witty enuf prime. when you take out factorials nCr you have to 
+        keep in mind the constraints you cannot process alot of factorials, so we come up with many ways of figuring out. first we look over optimum ways of calculating nCr,  refer this :: <a href="https://www.geeksforgeeks.org/dsa/program-calculate-value-ncr/">Program to calculate value of nCr</a><br>
+        look at the expected approach O(r) time and O(1) space,<br>
+        <pre><code>
+        for (int i = 1; i <= r; i++){
+            sum = sum * (n - r + i) / i;
+        }
+        return (int)sum;
+        </code></pre><br> 
+        now we look over the binomial coeff mod m link, in that we see several ways of calculating shit,most optimum is to use inverse modulo :: when we do sum = sum*(n-r+i)/i. we simply convert this to sum*(n-r+i)*(i^-1)mod m<br> 
+        use famous fermats little theorem: a^(p-1)==1modp  where gcd(a,p)=1.<br> 
+        tweak this a little bit to get: a^(p-2)==a^-1modp. so basically i^-1 modm is same as pow(i,m-2)modm   
+        this makes our job easier: now we get: 
+        <pre><code>
+            long long ncr(long long n, long long r){
+        if (r < 0 || r > n || n < 0) return 0;
+        long long sum=1; 
+        for(long long i=1;i<=r;i++){
+            long long num = (n-r+i)%mod;
+            sum=sum*num%mod; 
+            sum= sum* power(i, mod-2)%mod; 
+        }
+        return sum;
+    }
+        </code></pre><br>
+        in this you have to modify the power function to give the power in modm form to not get overflow. <br><br>
+        another great way is to precalculate the both factorial and inverse of factorial using for loop but at each iteration you make sure to take modm. to find out the inverse of factorial. <br> 
+        nCr= n!/(n-r)!(r!) <br> 
+        nCr modm can be written as in inverse modulo form: n!modm*((n-r)! ^-1)modm*(r!^-1)modm <br> 
+        <pre><code>
+            void build(ll MAXN){  // to precompute 
+    inversion.assign(MAXN+1,1); 
+    fact.assign(MAXN+1,1); 
+    for(ll i=1;i<=MAXN;i++){
+        fact[i]=fact[i-1]*i%mod; 
+    }
+    inversion[MAXN] = pow(fact[MAXN],mod- 2);
+    for (int i=MAXN;i>=1;i--) inversion[i-1]=inversion[i]*i%mod; 
+}
+ll ncr(ll n,ll r){ // to evaluate the final result
+    if (r < 0 || n < 0 || r > n) return 0;
+    return fact[n]*(inversion[n-r])%mod * inversion[r]%mod; 
+}
+        </code></pre>
         </p>
         <p>follow my everyday blogs, youre going to witness my life ramming and unfolding infront of your eyes!!  </p>
         <p>&copy; 2026 My Simple Blog</p>
