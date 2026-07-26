@@ -18,7 +18,7 @@
         <p>
            blogs will be available weekly, days are already hectic, mini tests coming up, classes are trash i dont like it ,i dont like college at all, its just attendance and 
            boring lectures that i personally dont want to and cant understand. my hours are consumed by codeforces i really want to do something else maybe records shortfilms,make music on fl studio, i think i need a break.<br>
-           i dont want away everything on dsa/cp so i also registered for few hackathons. its kind of refreshing to get your mind off one thing to another to keep yourself busy. <br>
+           i dont want to waste away everything on dsa/cp so i also registered for few hackathons. its kind of refreshing to get your mind off one thing to another to keep yourself busy. <br>
         <a href= "https://codeforces.com/contest/1804/problem/C">Pull your Luck</a> if you notice,(f)+(f-1)+...1 is just sum of first f elements so you had to first create a prefix vector to store sum of first ith elements in the ith index, what should be the size of the vector? take max space as k<=10^12. Now the problem is for each n you cant iterate the prefix vector until 10^5 thats too much, you have to strip it down. 
         as we are dealing with a circular instrument so maybe we have periodicity in the (x+ pref[i])%n==0  ==> take for example T(f)= f*(f+1)/2 so now take T(f+2n)= (f+2n)*(f+2n+1)/2. <br> 
         T(f+2n)-T(f) =n(2f + 2n + 1). <br> 
