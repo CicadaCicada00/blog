@@ -37,7 +37,7 @@
         }
         return (int)sum;
         </code></pre><br> 
-        now we look over the binomial coeff mod m link, in that we see several ways of calculating shit,most optimum is to use inverse modulo :: when we do sum = sum*(n-r+i)/i. we simply convert this to sum*(n-r+i)*(i^-1)mod m<br> 
+        now we look over the binomial coeff mod m link, in that we see several ways of calculating shit,most optimum is to use <a href="https://cp-algorithms.com/algebra/module-inverse.html">inverse modulo</a>  :: when we do sum = sum*(n-r+i)/i. we simply convert this to sum*(n-r+i)*(i^-1)mod m<br> 
         use famous fermats little theorem: a^(p-1)==1modp  where gcd(a,p)=1.<br> 
         tweak this a little bit to get: a^(p-2)==a^-1modp. so basically i^-1 modm is same as pow(i,m-2)modm   
         this makes our job easier: now we get: 
