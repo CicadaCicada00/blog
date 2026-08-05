@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>About Me - Introduction</title>
+    <link rel="stylesheet" href="..\style.css">
+</head>
+<body>
+    <header>
+        <h1>22-26th July 2026</h1>
+        <nav>
+            <a href="..\index.html">Home</a>
+        </nav> 
+    </header>
+
+    <main>
+        <p>
+            this is august 5th and my ass got detained in COA mini test, i basically missed 2 classes(excluding gt) out of 13 conducted, out of this 3 were gt. 
+            got my meds refilled and i am pumped up, everything is in perfect order, i just gotta push through, i decided today that i need to add college studies in my offcollege hours, 
+            this college only deserves 1 hour of my time. FUCK YOU.  
+            i have been trying out dp problem and its been nice ride lowkey. 
+            <a href ="https://codeforces.com/problemset/problem/1037/D">Valid bfs</a> this is good fundamental problem, when you have adjacency list, the bfs sequence {a} is given wrt how the adjacency list is arranged, so the problem becomes to first find out how the adjacency list is arranged. how to do that?
+            you have to follow a basic principal index[node]>=index[parent] and index[node+1]>= index[node] <br>
+            maintain a index vector where you store the index of each node in the bfs sequence, after this, sort the adjacency list wrt to this index vector(make this the comparator function).  <br>
+        
+        <code><pre>
+        bool comp(ll i, ll j){
+            return index[i]<index[j];
+        }
+        for(ll i=0;i<n;i++){
+            sort(adj[i].begin(),adj[i].end(),comp);
+        }
+        </pre></code><br>
+        now make the bfs sequence according to the adjacency list and check if it is same as the given bfs sequence. <br>
+        thanks to this wonderful guy: <a href="https://www.youtube.com/@adhishkancharla">Adhish Kancharla</a> he has good graph playlist, yall might follow him for that. <br>
+        </p>
+        <p>follow my everyday blogs, youre going to witness my life ramming and unfolding infront of your eyes!!  </p>
+        <p>&copy; 2026 My Simple Blog</p>
+    </footer>
+</body>
+</html>
