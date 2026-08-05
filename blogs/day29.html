@@ -22,7 +22,7 @@
             i have been trying out dp problem and its been nice ride lowkey. 
             <a href ="https://codeforces.com/problemset/problem/1037/D">Valid bfs</a> this is good fundamental problem, when you have adjacency list, the bfs sequence {a} is given wrt how the adjacency list is arranged, so the problem becomes to first find out how the adjacency list is arranged. how to do that?
             you have to follow a basic principal index[node]>=index[parent] and index[node+1]>= index[node] <br>
-            maintain a index vector where you store the index of each node in the bfs sequence, after this, sort the adjacency list wrt to this index vector(make this the comparator function).  <br>
+            maintain an index vector where you store the index of each node in the bfs sequence, after this, sort the adjacency list wrt to this index vector(make this the comparator function).  <br>
         
         <code><pre>
         bool comp(ll i, ll j){
