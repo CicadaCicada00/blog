@@ -1,0 +1,11 @@
+{
+    "cpTestcases.cppCompilerArgs": [
+        "-std=gnu++17",
+        "-O2",
+        "-Wl,--stack,536870912"
+    ],
+    "cpTestcases.cCompilerArgs": [
+        "-O2",
+        "-Wl,--stack,536870912"
+    ]
+}
