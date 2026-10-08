@@ -3,24 +3,48 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>About Me - Introduction</title>
-    <link rel="stylesheet" href="..\style.css">
+    <title>12th July 2026 (Locked)</title>
+    <link rel="stylesheet" href="../style.css">
 </head>
 <body>
     <header>
         <h1>12th July 2026</h1>
         <nav>
-            <a href="..\index.html">Home</a>
-        </nav> 
+            <a href="../index.html">Home</a>
+        </nav>
     </header>
 
     <main>
-        <p>
-           <img src="wantit.png" alt="demo"> <br><br>
-             
-        </p>
-        <p>follow my everyday blogs, youre going to witness my life ramming and unfolding infront of your eyes!!  </p>
+        <div id="lock-box" class="lock-card">
+            <span class="lock-badge">&#128274; RESTRICTED ACCESS</span>
+            <h3>This entry is private</h3>
+            <p>This entry contains personal reflections restricted to approved readers. Enter the secret access code below to unlock.</p>
+            
+            <form class="lock-form" onsubmit="event.preventDefault(); unlockPost();">
+                <input type="password" id="post-passcode" class="lock-input" placeholder="Enter access code..." autocomplete="off">
+                <button type="submit" class="lock-btn">Unlock</button>
+            </form>
+            <div id="lock-error" class="lock-error"></div>
+
+            <div class="lock-request">
+                <span>Don't have the code? Reach out on </span>
+                <a href="https://www.instagram.com/vandalised_wall/" target="_blank">Instagram (@vandalised_wall)</a>
+                <span> to request access.</span>
+            </div>
+        </div>
+
+        <div id="decrypted-content" style="display: none;"></div>
+
+        <p style="margin-top: 30px;">follow my everyday blogs, youre going to witness my life ramming and unfolding infront of your eyes!!</p>
+    </main>
+
+    <footer>
         <p>&copy; 2026 My Simple Blog</p>
     </footer>
+
+    <script>
+        window.LOCKED_POST = {"salt": "XnSxm7idIbQZwcu/8vqdSw==", "iv": "DsMVGFPGYrxU39yq", "data": "PuMXAIze40ZXyY2gmgG4GM8NwIKMRIq5KpB7mnt95bMs4jbB6O7t1r+FuPA8HdUpn3on9Hi9bJNR6MbmKHLP/UioZhhEkMnFdXaMsVqNdppoynhNIgayWAdpgycAN2tF0lwneQp4mznFEAtCte0r13yu8O82a7XbbX0LMQ/2iArkeZtBfJYozbItKca4yFSDKAm6EgF3zfAVRMD/h1uhD0c4p3ZSCMdj4Wbnngi2XXfN5Im7GOgUGu4kDuWhEYJ74D4wrtmaHl+YJzwDDiAonnXG213GdB7X1yIztZcTmVdSYblMDhE4cI2KyOIK8oWaSuw="};
+    </script>
+    <script src="../lock.js"></script>
 </body>
 </html>
