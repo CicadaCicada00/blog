@@ -1,9 +1,13 @@
 #!/usr/bin/env python3
 """
 lock_post.py
-Encrypts or unlocks a blog HTML file using PBKDF2 + AES-GCM (256-bit).
+Encrypts, unlocks, or re-keys blog HTML files using PBKDF2 + AES-GCM (256-bit).
 Compatible with Web Crypto API and lock.js.
-Handles unclosed <main> tags gracefully.
+Supports single-file or batch rekey operations:
+  python lock_post.py lock <day> <passcode>
+  python lock_post.py unlock <day> <passcode>
+  python lock_post.py rekey-all <old_passcode> <new_passcode>
+  python lock_post.py list
 """
 
 import sys
@@ -64,19 +68,17 @@ def find_file(day_arg: str, repo_dir: Path) -> Path:
     return target
 
 def extract_main_content(html: str) -> str:
-    # Look for <main>...</main>
     m = re.search(r'<main>(.*?)</main>', html, re.DOTALL | re.IGNORECASE)
     if m:
         return m.group(1).strip()
     
-    # Or unclosed <main> until <footer> or </body>
     m2 = re.search(r'<main>(.*?)(?=<footer>|</body>)', html, re.DOTALL | re.IGNORECASE)
     if m2:
         return m2.group(1).strip()
 
     return ""
 
-def lock_file(target_file: Path, password: str):
+def lock_file(target_file: Path, password: str, quiet=False):
     if not target_file.exists():
         print(f"Error: File not found: {target_file}")
         sys.exit(1)
@@ -84,10 +86,9 @@ def lock_file(target_file: Path, password: str):
     html = target_file.read_text(encoding='utf-8')
 
     if "window.LOCKED_POST" in html:
-        print(f"{target_file.name} is already locked!")
-        return
+        print(f"Note: {target_file.name} is already locked. If changing password, use 'rekey' or 'unlock' first.")
+        return False
 
-    # Extract title from <h1> or <title>
     title_match = re.search(r'<h1>(.*?)</h1>', html, re.DOTALL | re.IGNORECASE)
     title = title_match.group(1).strip() if title_match else target_file.stem
 
@@ -96,9 +97,7 @@ def lock_file(target_file: Path, password: str):
         print(f"Error: Could not locate content inside <main> tag in {target_file.name}")
         sys.exit(1)
 
-    # Filter out footer copyright line if it was accidentally inside unclosed <main>
     main_content = re.sub(r'<p>&copy;.*?</p>', '', main_content, flags=re.IGNORECASE).strip()
-
     payload = encrypt_text(password, main_content)
 
     locked_html = f"""<!DOCTYPE html>
@@ -154,23 +153,24 @@ def lock_file(target_file: Path, password: str):
 """
 
     target_file.write_text(locked_html, encoding='utf-8')
-    print(f"[OK] {target_file.name} is now encrypted and locked with passcode '{password}'.")
+    if not quiet:
+        print(f"[OK] {target_file.name} is now encrypted and locked with passcode '{password}'.")
+    return True
 
-def unlock_file(target_file: Path, password: str):
+def unlock_file(target_file: Path, password: str, quiet=False):
     if not target_file.exists():
         print(f"Error: File not found: {target_file}")
         sys.exit(1)
 
     html = target_file.read_text(encoding='utf-8')
     if "window.LOCKED_POST" not in html:
-        print(f"{target_file.name} is already plain HTML (not locked).")
-        return
+        if not quiet:
+            print(f"{target_file.name} is already plain HTML (not locked).")
+        return False
 
-    # Extract title
     title_match = re.search(r'<h1>(.*?)</h1>', html, re.DOTALL | re.IGNORECASE)
     title = title_match.group(1).strip() if title_match else target_file.stem
 
-    # Extract payload json
     payload_match = re.search(r'window\.LOCKED_POST\s*=\s*(\{.*?\});', html, re.DOTALL)
     if not payload_match:
         print("Error: Could not extract encryption payload from file.")
@@ -180,9 +180,10 @@ def unlock_file(target_file: Path, password: str):
 
     try:
         decrypted_content = decrypt_payload(password, payload)
-    except Exception as e:
-        print(f"Error: Incorrect passcode for {target_file.name}. Could not unlock.")
-        sys.exit(1)
+    except Exception:
+        if not quiet:
+            print(f"Error: Incorrect passcode for {target_file.name}. Could not unlock.")
+        return False
 
     unlocked_html = f"""<!DOCTYPE html>
 <html lang="en">
@@ -211,26 +212,88 @@ def unlock_file(target_file: Path, password: str):
 </html>
 """
     target_file.write_text(unlocked_html, encoding='utf-8')
-    print(f"[OK] {target_file.name} is now restored to plain HTML.")
+    if not quiet:
+        print(f"[OK] {target_file.name} is now restored to plain HTML.")
+    return True
+
+def list_locked_posts(repo_dir: Path):
+    blogs_dir = repo_dir / "blogs"
+    files = sorted(blogs_dir.glob("*.html"))
+    locked = []
+    plain = []
+    for f in files:
+        txt = f.read_text(encoding='utf-8')
+        if "window.LOCKED_POST" in txt:
+            locked.append(f.name)
+        else:
+            plain.append(f.name)
+
+    print("\n--- Current Blog Post Status ---")
+    print(f"Locked ({len(locked)}):   " + (", ".join(locked) if locked else "None"))
+    print(f"Public ({len(plain)}):   " + (", ".join(plain) if plain else "None"))
+    print("--------------------------------\n")
+
+def rekey_all(repo_dir: Path, old_password: str, new_password: str):
+    blogs_dir = repo_dir / "blogs"
+    files = sorted(blogs_dir.glob("*.html"))
+    
+    locked_count = 0
+    updated_count = 0
+    failed_count = 0
+
+    print(f"Scanning {len(files)} blog posts for locked entries...\n")
+
+    for f in files:
+        txt = f.read_text(encoding='utf-8')
+        if "window.LOCKED_POST" in txt:
+            locked_count += 1
+            # Step 1: Unlock with old password
+            success = unlock_file(f, old_password, quiet=True)
+            if not success:
+                print(f"[FAIL] {f.name}: Old passcode was incorrect. Skipped.")
+                failed_count += 1
+                continue
+            
+            # Step 2: Lock with new password
+            lock_file(f, new_password, quiet=True)
+            print(f"[UPDATED] {f.name}: Re-encrypted with new passcode.")
+            updated_count += 1
+
+    print(f"\nFinished! Rekeyed {updated_count}/{locked_count} locked posts.")
+    if failed_count > 0:
+        print(f"{failed_count} posts could not be rekeyed because the old passcode did not match.")
 
 def main():
-    if len(sys.argv) < 3:
+    if len(sys.argv) < 2:
         print("Usage:")
-        print("  lock <dayNumber> <passcode>")
-        print("  unlock <dayNumber> <passcode>")
-        print("Example:")
-        print("  lock 34 mySecretPass")
+        print("  lock <dayNumber> <passcode>                     # Lock a single post")
+        print("  unlock <dayNumber> <passcode>                   # Unlock a single post")
+        print("  rekey-all <old_passcode> <new_passcode>          # Change passcode on ALL locked posts")
+        print("  list                                            # List which posts are locked vs public")
         sys.exit(1)
 
     action = sys.argv[1].lower()
-    day_arg = sys.argv[2]
-    password = sys.argv[3] if len(sys.argv) > 3 else ""
+    repo_dir = Path(__file__).resolve().parent
 
-    if not password:
-        print("Error: Passcode is required.")
+    if action in ("list", "status"):
+        list_locked_posts(repo_dir)
+        return
+
+    if action in ("rekey-all", "change-pass", "change-password"):
+        if len(sys.argv) < 4:
+            print("Usage: rekey-all <old_passcode> <new_passcode>")
+            sys.exit(1)
+        old_pass = sys.argv[2]
+        new_pass = sys.argv[3]
+        rekey_all(repo_dir, old_pass, new_pass)
+        return
+
+    if len(sys.argv) < 4:
+        print(f"Usage: {action} <dayNumber> <passcode>")
         sys.exit(1)
 
-    repo_dir = Path(__file__).resolve().parent
+    day_arg = sys.argv[2]
+    password = sys.argv[3]
     target_file = find_file(day_arg, repo_dir)
 
     if action == "lock":
@@ -238,7 +301,7 @@ def main():
     elif action == "unlock":
         unlock_file(target_file, password)
     else:
-        print(f"Unknown action: {action}. Use 'lock' or 'unlock'.")
+        print(f"Unknown action: {action}")
         sys.exit(1)
 
 if __name__ == "__main__":
