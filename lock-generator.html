@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lock Blog Post Generator</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <header>
+        <h1>Lock Blog Post Generator</h1>
+        <nav>
+            <a href="index.html">Home</a>
+        </nav>
+    </header>
+
+    <main>
+        <h2>Encrypt & Lock a Blog Entry</h2>
+        <p>Paste the private blog text or HTML here, set your secret access code, and click generate. It will output ready-to-use HTML with real 256-bit AES encryption.</p>
+
+        <div style="margin: 20px 0;">
+            <label style="font-weight: 800; display: block; margin-bottom: 6px;">1. Post Date / Heading:</label>
+            <input id="post-title" type="text" class="lock-input" style="width: 100%; box-sizing: border-box;" value="9th Oct, 2026">
+        </div>
+
+        <div style="margin: 20px 0;">
+            <label style="font-weight: 800; display: block; margin-bottom: 6px;">2. Secret Access Code (Passcode):</label>
+            <input id="post-secret" type="text" class="lock-input" style="width: 100%; box-sizing: border-box;" placeholder="e.g. secret123 or a private squad password">
+        </div>
+
+        <div style="margin: 20px 0;">
+            <label style="font-weight: 800; display: block; margin-bottom: 6px;">3. Private Blog Body Content:</label>
+            <textarea id="post-body" class="lock-input" style="width: 100%; height: 200px; box-sizing: border-box; line-height: 1.5;" placeholder="Type your personal thoughts / blog content here..."></textarea>
+        </div>
+
+        <button onclick="generateLockedPost()" class="lock-btn" style="width: 100%; padding: 14px; font-size: 15px;">Generate Locked HTML</button>
+
+        <div id="output-area" style="display: none; margin-top: 30px;">
+            <h3>Generated Locked HTML</h3>
+            <p>Save this as your <code>blogs/dayXX.html</code> file:</p>
+            <textarea id="output-code" class="lock-input" style="width: 100%; height: 260px; font-family: monospace; font-size: 13px; box-sizing: border-box;" readonly></textarea>
+            <button onclick="navigator.clipboard.writeText(document.getElementById('output-code').value); alert('Copied to clipboard!');" class="lock-btn" style="margin-top: 10px; background: var(--blue);">Copy to Clipboard</button>
+        </div>
+    </main>
+
+    <footer>
+        <p>&copy; 2026 My Simple Blog</p>
+    </footer>
+
+    <script>
+        function bufToBase64(buf) {
+            let bin = '';
+            const bytes = new Uint8Array(buf);
+            for (let i = 0; i < bytes.byteLength; i++) {
+                bin += String.fromCharCode(bytes[i]);
+            }
+            return btoa(bin);
+        }
+
+        async function deriveKey(password, salt) {
+            const enc = new TextEncoder();
+            const keyMaterial = await window.crypto.subtle.importKey(
+                "raw",
+                enc.encode(password),
+                { name: "PBKDF2" },
+                false,
+                ["deriveKey"]
+            );
+            return window.crypto.subtle.deriveKey(
+                {
+                    name: "PBKDF2",
+                    salt: salt,
+                    iterations: 100000,
+                    hash: "SHA-256"
+                },
+                keyMaterial,
+                { name: "AES-GCM", length: 256 },
+                false,
+                ["encrypt"]
+            );
+        }
+
+        async function generateLockedPost() {
+            const title = document.getElementById("post-title").value.trim() || "Private Entry";
+            const secret = document.getElementById("post-secret").value.trim();
+            const body = document.getElementById("post-body").value.trim();
+
+            if (!secret) {
+                alert("Please provide an access code / password.");
+                return;
+            }
+            if (!body) {
+                alert("Please provide the blog text to encrypt.");
+                return;
+            }
+
+            // Wrap text lines into paragraphs/breaks if plain text
+            const formattedBody = body.includes("<p>") ? body : "<p>" + body.replace(/\n/g, "<br>") + "</p>";
+
+            const enc = new TextEncoder();
+            const salt = window.crypto.getRandomValues(new Uint8Array(16));
+            const iv = window.crypto.getRandomValues(new Uint8Array(12));
+
+            const key = await deriveKey(secret, salt);
+            const cipherBuf = await window.crypto.subtle.encrypt(
+                { name: "AES-GCM", iv: iv },
+                key,
+                enc.encode(formattedBody)
+            );
+
+            const payload = {
+                salt: bufToBase64(salt),
+                iv: bufToBase64(iv),
+                data: bufToBase64(cipherBuf)
+            };
+
+            const html = `<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>${title} (Locked)</title>
+    <link rel="stylesheet" href="../style.css">
+</head>
+<body>
+    <header>
+        <h1>${title}</h1>
+        <nav>
+            <a href="../index.html">Home</a>
+        </nav>
+    </header>
+
+    <main>
+        <div id="lock-box" class="lock-card">
+            <span class="lock-badge">&#128274; RESTRICTED ACCESS</span>
+            <h3>This entry is private</h3>
+            <p>This entry contains personal reflections restricted to approved readers. Enter the secret access code below to unlock.</p>
+            
+            <form class="lock-form" onsubmit="event.preventDefault(); unlockPost();">
+                <input type="password" id="post-passcode" class="lock-input" placeholder="Enter access code..." autocomplete="off">
+                <button type="submit" class="lock-btn">Unlock</button>
+            </form>
+            <div id="lock-error" class="lock-error"></div>
+
+            <div class="lock-request">
+                <span>Don't have the code? Reach out on </span>
+                <a href="https://www.instagram.com/vandalised_wall/" target="_blank">Instagram (@vandalised_wall)</a>
+                <span> to request access.</span>
+            </div>
+        </div>
+
+        <div id="decrypted-content" style="display: none;"></div>
+
+        <p style="margin-top: 30px;">follow my everyday blogs, youre going to witness my life ramming and unfolding infront of your eyes!!</p>
+    </main>
+
+    <footer>
+        <p>&copy; 2026 My Simple Blog</p>
+    </footer>
+
+    <script>
+        window.LOCKED_POST = ${JSON.stringify(payload)};
+    <\/script>
+    <script src="../lock.js"><\/script>
+</body>
+</html>`;
+
+            document.getElementById("output-code").value = html;
+            document.getElementById("output-area").style.display = "block";
+        }
+    </script>
+</body>
+</html>

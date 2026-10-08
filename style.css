@@ -107,3 +107,107 @@ footer {
     font-size: 14px;
     font-weight: 600;
 }
+
+/* --- Lock UI Styles (Bauhaus Minimal Theme) --- */
+.lock-card {
+    text-align: center;
+    padding: 30px 20px;
+    background: #fff;
+    border: 3px solid var(--ink);
+    box-shadow: 5px 5px 0 var(--ink);
+    margin: 20px 0;
+}
+
+.lock-badge {
+    display: inline-block;
+    padding: 4px 12px;
+    font-size: 11px;
+    font-weight: 800;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    background: var(--yellow);
+    border: 2px solid var(--ink);
+    margin-bottom: 12px;
+}
+
+.lock-card h3 {
+    margin: 10px 0;
+    font-size: 22px;
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: -0.5px;
+}
+
+.lock-card p {
+    margin: 8px auto 20px auto;
+    font-size: 15px;
+    color: #444;
+    max-width: 480px;
+}
+
+.lock-form {
+    display: flex;
+    justify-content: center;
+    gap: 8px;
+    flex-wrap: wrap;
+    max-width: 420px;
+    margin: 0 auto;
+}
+
+.lock-input {
+    flex: 1;
+    min-width: 200px;
+    padding: 10px 14px;
+    font-family: inherit;
+    font-size: 14px;
+    font-weight: 600;
+    border: 2px solid var(--ink);
+    box-shadow: 3px 3px 0 var(--ink);
+    outline: none;
+    background: #fafafa;
+}
+
+.lock-input:focus {
+    background: #fff;
+    border-color: var(--blue);
+}
+
+.lock-btn {
+    padding: 10px 18px;
+    color: #fff;
+    background: var(--red);
+    border: 2px solid var(--ink);
+    box-shadow: 3px 3px 0 var(--ink);
+    font-family: inherit;
+    font-size: 13px;
+    font-weight: 800;
+    text-transform: uppercase;
+    cursor: pointer;
+    transition: transform 0.1s, box-shadow 0.1s;
+}
+
+.lock-btn:hover {
+    transform: translate(2px, 2px);
+    box-shadow: 1px 1px 0 var(--ink);
+}
+
+.lock-error {
+    margin-top: 14px;
+    font-size: 13px;
+    font-weight: 700;
+    color: var(--red);
+    display: none;
+}
+
+.lock-request {
+    margin-top: 24px;
+    padding-top: 16px;
+    border-top: 2px dashed #ccc;
+    font-size: 13px;
+}
+
+.lock-request a {
+    color: var(--blue);
+    font-weight: 800;
+    text-decoration: underline;
+}

@@ -3,26 +3,48 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>About Me - Introduction</title>
-    <link rel="stylesheet" href="..\style.css">
+    <title>9th Oct, 2026 (Locked)</title>
+    <link rel="stylesheet" href="../style.css">
 </head>
 <body>
     <header>
-        <h1>8th Oct 2026</h1>
+        <h1>9th Oct, 2026</h1>
         <nav>
-            <a href="..\index.html">Home</a>
-        </nav> 
+            <a href="../index.html">Home</a>
+        </nav>
     </header>
 
     <main>
-        <p>
-            project did get a good response but not alot. I dont care tbh. I am going to keep making and putting it out there, I am pretty sure my projects are going to find someone who is going to LOVE them. <br> 
-            one thing i do get is my projects lack stories which i have no solution for, i can incorporate stories but i dont have that skillset rn to masterfully execute it without ruining my current style,need alot of things going good for me to make it happen, lets see what happens in the next one. <br> 
-            I am talking to this person it was hard to convince her to work on shit like this, but somehow she agreed which is worse than i thought cuz now i have to actually meet her and explain her the whole process without scaring her away lmfaoo : (  <br> 
-            got my meds refilled today. not feeling great for few days maybe cuz of sleep cycle disruption, but ima still grind few cf questions... <br>
-            i jus wana leave this shit bruh, i dont wanna do this shit, i wana go home and just do cf all day and make movies, i dont wana be here, i just cant do this shit, attendance is hell hole, ruining my sleep and peace everyday to go to college, i dont like this a single bit, i just wana be with my sisters and mom. i miss them so much. Donnie Darko i love you so much. 
-        <p>follow my everyday blogs, youre going to witness my life ramming and unfolding infront of your eyes!!  </p>
+        <div id="lock-box" class="lock-card">
+            <span class="lock-badge">&#128274; RESTRICTED ACCESS</span>
+            <h3>This entry is private</h3>
+            <p>This entry contains personal reflections restricted to approved readers. Enter the secret access code below to unlock.</p>
+            
+            <form class="lock-form" onsubmit="event.preventDefault(); unlockPost();">
+                <input type="password" id="post-passcode" class="lock-input" placeholder="Enter access code..." autocomplete="off">
+                <button type="submit" class="lock-btn">Unlock</button>
+            </form>
+            <div id="lock-error" class="lock-error"></div>
+
+            <div class="lock-request">
+                <span>Don't have the code? Reach out on </span>
+                <a href="https://www.instagram.com/vandalised_wall/" target="_blank">Instagram (@vandalised_wall)</a>
+                <span> to request access.</span>
+            </div>
+        </div>
+
+        <div id="decrypted-content" style="display: none;"></div>
+
+        <p style="margin-top: 30px;">follow my everyday blogs, youre going to witness my life ramming and unfolding infront of your eyes!!</p>
+    </main>
+
+    <footer>
         <p>&copy; 2026 My Simple Blog</p>
     </footer>
+
+    <script>
+        window.LOCKED_POST = {"salt":"mVRI+xQrXJzu0oY7ZeCu7g==","iv":"wAGaix5/Cpjbl6Eu","data":"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"};
+    </script>
+    <script src="../lock.js"></script>
 </body>
 </html>
